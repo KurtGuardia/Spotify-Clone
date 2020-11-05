@@ -1,12 +1,12 @@
-import { useState } from "react";
 import "./App.scss";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Login, Home, Favorites, User, NotFound } from "./Views/Index";
 import Player from "./Components/Player/Player";
 import Sidebar from "./Components/Sidebar/Sidebar";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [isLoggedIn] = useState(false);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   if (!isLoggedIn) {
     return <Login />;
