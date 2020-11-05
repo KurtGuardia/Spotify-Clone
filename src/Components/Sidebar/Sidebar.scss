@@ -25,7 +25,9 @@
 
       &::after {
         content: "clone";
-        transform: translateY(45deg);
+        font-size: 1.3rem;
+        margin-left: 10px;
+        color: #1ed760;
       }
     }
   }
