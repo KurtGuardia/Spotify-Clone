@@ -9,15 +9,19 @@ import { ReactComponent as LoopIcon } from "../../assets/images/loop.svg";
 import sound1 from "../../assets/music/heavy/Metallica-Enter-Sandman.mp3";
 import sound2 from "../../assets/music/heavy/Slipknot-Psychosocial.mp3";
 import sound3 from "../../assets/music/heavy/System-of-a-Down-B.Y.O.B..mp3";
+import sound from "../../assets/music/heavy/1.mp3";
 
+const song = new Audio(sound);
 const song1 = new Audio(sound1);
 const song2 = new Audio(sound2);
 const song3 = new Audio(sound3);
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playlist] = useState([song1, song2, song3]);
+  const [playlist] = useState([song, song1, song2, song3]);
   const [songIndex, setSongIndex] = useState(0);
+  const [isLooping, setIsLooping] = useState(true);
+  const [isRandom, setIsRandom] = useState(false);
 
   const playSong = useCallback(() => {
     setIsPlaying(true);
@@ -27,19 +31,21 @@ const Player = () => {
     if (playPromise !== undefined) {
       playPromise
         .then((_) => {
+          // isLooping && setIsPlaying(true);
           setIsPlaying(true);
           console.log("autoplay");
         })
         .catch((error) => {
           console.log("playback prevented");
+          setIsPlaying(false);
         });
     }
   }, [playlist, songIndex]);
 
-  const pauseSong = () => {
+  const pauseSong = useCallback(() => {
     setIsPlaying(false);
     playlist[songIndex].pause();
-  };
+  }, [playlist, songIndex]);
 
   const prevSong = () => {
     pauseSong();
@@ -52,7 +58,7 @@ const Player = () => {
     });
   };
 
-  const nextSong = () => {
+  const nextSong = useCallback(() => {
     pauseSong();
 
     setSongIndex((prevSongIndex) => {
@@ -61,15 +67,32 @@ const Player = () => {
       }
       return prevSongIndex + 1;
     });
-  };
+  }, [pauseSong, playlist.length, isLooping]);
 
   useEffect(() => {
     playSong();
   }, [songIndex, playSong]);
 
   useEffect(() => {
+    if (isLooping) {
+      playlist[songIndex].addEventListener("ended", nextSong);
+    } else if (!isLooping) {
+      playlist[songIndex].addEventListener("ended", () => {
+        setIsPlaying(false);
+      });
+    }
+    return () => {
+      playlist[songIndex].removeEventListener("ended", nextSong);
+      playlist[songIndex].removeEventListener("ended", () => {
+        setIsPlaying(false);
+      });
+    };
+  }, [playlist, isLooping, songIndex, nextSong]);
+
+  useEffect(() => {
     setIsPlaying(false);
   }, []);
+
   return (
     <div className="player">
       <div className="player__album">
@@ -92,16 +115,23 @@ const Player = () => {
       </div>
 
       <div className="player__controls">
-        <RandomIcon />
+        <RandomIcon
+          className={isRandom ? "random" : ""}
+          onClick={() => setIsRandom(!isRandom)}
+        />
+        {isRandom && <div className="dotr"></div>}
         <ArrowIconIcon className="previous" onClick={prevSong} />
         {isPlaying ? (
           <PauseIcon onClick={pauseSong} />
         ) : (
           <PlayIcon className="play-pause-btn" onClick={playSong} />
         )}
-
         <ArrowIconIcon onClick={nextSong} />
-        <LoopIcon />
+        <LoopIcon
+          onClick={() => setIsLooping(!isLooping)}
+          className={isLooping ? "loop" : ""}
+        />{" "}
+        {isLooping && <div className="dotl"></div>}
       </div>
     </div>
   );
