@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import "./Player.scss";
 import { ReactComponent as AlbumIcon } from "../../assets/images/album.svg";
 import { ReactComponent as PlayIcon } from "../../assets/images/play.svg";
 import { ReactComponent as PauseIcon } from "../../assets/images/pause.svg";
-import { ReactComponent as ArrowIconIcon } from "../../assets/images/arrowIcon.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/images/arrowIcon.svg";
 import { ReactComponent as RandomIcon } from "../../assets/images/random.svg";
 import { ReactComponent as LoopIcon } from "../../assets/images/loop.svg";
 import sound1 from "../../assets/music/heavy/Metallica-Enter-Sandman.mp3";
@@ -22,6 +22,10 @@ const Player = () => {
   const [songIndex, setSongIndex] = useState(0);
   const [isLooping, setIsLooping] = useState(true);
   const [isRandom, setIsRandom] = useState(false);
+  const [currentTime, setCurrentTime] = useState("0:00");
+  const [duration, setDuration] = useState("3:00");
+  const [progressPercent, setProgressPercent] = useState(0);
+  const progressRef = useRef();
 
   const playSong = useCallback(() => {
     setIsPlaying(true);
@@ -31,9 +35,8 @@ const Player = () => {
     if (playPromise !== undefined) {
       playPromise
         .then((_) => {
-          // isLooping && setIsPlaying(true);
-          setIsPlaying(true);
           console.log("autoplay");
+          setIsPlaying(true);
         })
         .catch((error) => {
           console.log("playback prevented");
@@ -51,8 +54,10 @@ const Player = () => {
     pauseSong();
 
     setSongIndex((prevSongIndex) => {
-      if (prevSongIndex <= 0) {
+      if (prevSongIndex <= 0 && !isRandom) {
         return (prevSongIndex = playlist.length - 1);
+      } else if (prevSongIndex <= 0 && isRandom) {
+        return (prevSongIndex = Math.floor(Math.random() * playlist.length));
       }
       return prevSongIndex - 1;
     });
@@ -62,18 +67,51 @@ const Player = () => {
     pauseSong();
 
     setSongIndex((prevSongIndex) => {
-      if (prevSongIndex >= playlist.length - 1) {
+      if (prevSongIndex >= playlist.length - 1 && !isRandom) {
         return (prevSongIndex = 0);
+      } else if (prevSongIndex >= playlist.length - 1 && isRandom) {
+        return (prevSongIndex = Math.floor(Math.random() * playlist.length));
+      } else if (isRandom) {
+        return Math.floor(Math.random() * playlist.length);
       }
       return prevSongIndex + 1;
     });
-  }, [pauseSong, playlist.length, isLooping]);
+
+    playlist[songIndex].currentTime = 0;
+    setCurrentTime("0:00");
+  }, [pauseSong, isRandom, playlist, songIndex]);
+
+  const formatTime = (time) => {
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
+
+    return `${minutes}:${seconds >= 10 ? seconds : "0" + seconds}`;
+  };
+
+  const updateProgress = useCallback((e) => {
+    const { duration, currentTime } = e.srcElement;
+    const percent = (currentTime / duration) * 100;
+    setCurrentTime(formatTime(currentTime));
+    setDuration(formatTime(duration));
+    setProgressPercent(percent);
+  }, []);
+
+  function setProgress(e) {
+    console.log("click");
+    const width = progressRef.current.offsetWidth;
+    const clickX = e.nativeEvent.offsetX;
+    const duration = playlist[songIndex].duration;
+
+    playlist[songIndex].currentTime = (clickX / width) * duration;
+    setCurrentTime((clickX / width) * duration);
+  }
 
   useEffect(() => {
     playSong();
   }, [songIndex, playSong]);
 
   useEffect(() => {
+    playlist[songIndex].addEventListener("timeupdate", updateProgress);
     if (isLooping) {
       playlist[songIndex].addEventListener("ended", nextSong);
     } else if (!isLooping) {
@@ -82,16 +120,24 @@ const Player = () => {
       });
     }
     return () => {
+      playlist[songIndex].removeEventListener("timeupdate", updateProgress);
       playlist[songIndex].removeEventListener("ended", nextSong);
       playlist[songIndex].removeEventListener("ended", () => {
         setIsPlaying(false);
       });
     };
-  }, [playlist, isLooping, songIndex, nextSong]);
+  }, [playlist, isLooping, songIndex, nextSong, updateProgress]);
 
   useEffect(() => {
     setIsPlaying(false);
   }, []);
+
+  const style = {
+    borderRadius: "20px",
+    backgroundColor: "#1db954",
+    width: `${progressPercent}%`,
+    height: "7px",
+  };
 
   return (
     <div className="player">
@@ -99,38 +145,50 @@ const Player = () => {
         <div className="player__album--img">
           <AlbumIcon />
         </div>
-
         <div className="player__album--data">
           <p className="player__album--title">Title</p>
-          <p className="player__album--artist">Artist</p>
+          <p className="player__album--artist">Artist {songIndex}</p>
         </div>
       </div>
 
       <div className="player__progress">
-        <p>2:30</p>
-        <div className="player__progress--container">
-          <div className="player__progress--bar"></div>
+        <p>{currentTime}</p>
+        <div
+          ref={progressRef}
+          className="player__progress--container"
+          onClick={setProgress}
+        >
+          <div className="player__progress--bar" style={style}></div>
         </div>
-        <p>3:30</p>
+        <p>{duration}</p>
       </div>
 
       <div className="player__controls">
         <RandomIcon
           className={isRandom ? "random" : ""}
-          onClick={() => setIsRandom(!isRandom)}
+          onClick={() => {
+            if (!isRandom) {
+              nextSong();
+            }
+            setIsRandom(!isRandom);
+          }}
         />
         {isRandom && <div className="dotr"></div>}
-        <ArrowIconIcon className="previous" onClick={prevSong} />
+
+        <ArrowIcon className="previous" onClick={prevSong} />
+
         {isPlaying ? (
-          <PauseIcon onClick={pauseSong} />
+          <PauseIcon className="play-pause-btn" onClick={pauseSong} />
         ) : (
           <PlayIcon className="play-pause-btn" onClick={playSong} />
         )}
-        <ArrowIconIcon onClick={nextSong} />
+
+        <ArrowIcon onClick={nextSong} />
+
         <LoopIcon
-          onClick={() => setIsLooping(!isLooping)}
           className={isLooping ? "loop" : ""}
-        />{" "}
+          onClick={() => setIsLooping(!isLooping)}
+        />
         {isLooping && <div className="dotl"></div>}
       </div>
     </div>
