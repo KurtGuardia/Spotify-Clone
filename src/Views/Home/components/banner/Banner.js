@@ -24,7 +24,7 @@ const Banner = () => {
     return months[month];
   };
 
-  const date = `${formatMonth(month)} the ${day} of ${year}`;
+  const date = `${formatMonth(month)} the ${day}th of ${year}`;
 
   return (
     <div className="banner">

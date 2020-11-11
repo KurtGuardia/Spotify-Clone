@@ -23,7 +23,7 @@ const Player = () => {
   const [isLooping, setIsLooping] = useState(true);
   const [isRandom, setIsRandom] = useState(false);
   const [currentTime, setCurrentTime] = useState("0:00");
-  const [duration, setDuration] = useState("3:00");
+  const [duration, setDuration] = useState("-:--");
   const [progressPercent, setProgressPercent] = useState(0);
   const progressRef = useRef();
 
