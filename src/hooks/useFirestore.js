@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import { db } from "../config/fbConfig";
 
 const useFirestore = (collection) => {
-  const [playlists, setPlaylists] = useState([]);
+  const [docs, setDocs] = useState([]);
 
   useEffect(() => {
     const unsub = db.collection(collection).onSnapshot((snap) => {
-      let playlists = [];
+      let docs = [];
       snap.forEach((doc) => {
-        playlists.push({ ...doc.data(), id: doc.id });
+        docs.push({ ...doc.data(), id: doc.id });
       });
-      setPlaylists(playlists);
+      setDocs(docs);
     });
     return () => unsub();
   }, [collection]);
 
-  return { playlists };
+  return { docs };
 };
 
 export default useFirestore;
