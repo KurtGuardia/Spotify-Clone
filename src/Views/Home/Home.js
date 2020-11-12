@@ -1,5 +1,5 @@
 import "./Home.scss";
-import { Banner, Header, Playlists } from "./components/index";
+import { Banner, Header, Playlists } from "./components";
 
 const Home = () => {
   return (
