@@ -1,0 +1,40 @@
+.playlist-container {
+  height: 91vh;
+  flex: 1;
+  background-color: #131111;
+  color: #ccc;
+  padding: 1rem 2rem;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.7em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #555;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #777;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #358a52;
+  }
+
+  &__table {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #777;
+  }
+}

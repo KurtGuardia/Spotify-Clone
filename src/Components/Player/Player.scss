@@ -12,6 +12,7 @@
 
   &__album {
     display: flex;
+    min-width: 12rem;
     align-items: center;
     color: #ccc;
     margin-left: 0.75rem;
@@ -55,10 +56,11 @@
 
   &__controls {
     position: relative;
+    min-width: 15rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 10rem;
+    margin: 0 7rem;
 
     & > * {
       opacity: 0.9;

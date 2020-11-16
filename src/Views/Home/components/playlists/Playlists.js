@@ -1,5 +1,5 @@
 import "./Playlists.scss";
-import PlaylistItem from "./Playlist/Playlist";
+import PlaylistItem from "./Playlist/PlaylistItem";
 import Spinner from "../../../../Components/UI/Spinner/Spinner";
 import useFirestore from "../../../../hooks/useFirestore";
 import { useEffect, useState } from "react";
