@@ -1,9 +1,14 @@
-import "./Playlist.scss";
+import "./PlaylistItem.scss";
 import { ReactComponent as AlbumIcon } from "../../../../../assets/icons/album.svg";
+import { Link } from "react-router-dom";
 
-const Playlist = ({ title, songs }) => {
+const Playlist = ({ title, songs, id, changePlaylist, index }) => {
   return (
-    <div className="playlistItem">
+    <Link
+      to={`/playlist/${id}`}
+      className="playlistItem"
+      onClick={() => changePlaylist(index)}
+    >
       <div className="playlistItem--left">
         <AlbumIcon />
       </div>
@@ -11,7 +16,7 @@ const Playlist = ({ title, songs }) => {
         <h2>{title}</h2>
         <p>{songs.length} songs</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

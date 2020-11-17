@@ -1,39 +1,53 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import "./Player.scss";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as AlbumIcon } from "../../assets/images/album.svg";
-import { ReactComponent as PlayIcon } from "../../assets/images/play.svg";
-import { ReactComponent as PauseIcon } from "../../assets/images/pause.svg";
-import { ReactComponent as ArrowIcon } from "../../assets/images/arrowIcon.svg";
-import { ReactComponent as RandomIcon } from "../../assets/images/random.svg";
-import { ReactComponent as LoopIcon } from "../../assets/images/loop.svg";
+import {
+  PlayIcon,
+  PauseIcon,
+  ArrowIcon,
+  RandomIcon,
+  LoopIcon,
+} from "../../assets/icons/index";
 
-const Player = () => {
-  const heavyPlaylist = useSelector((state) => state.music.playlists[2]);
+const Player = ({ currentPlaylist }) => {
+  const songIndex = useSelector((state) => state.music.current.songIndex);
+  const isRandom = useSelector((state) => state.music.controls.isRandom);
+  const isLooping = useSelector((state) => state.music.controls.isLooping);
+  const dispatch = useDispatch();
+
   const [isPlaying, setIsPlaying] = useState(false);
-  // const [playlist] = useState([song, song1, song2, song3]);
   const [playlist, setPlaylist] = useState([]);
-  const [songIndex, setSongIndex] = useState(0);
-  const [isLooping, setIsLooping] = useState(true);
-  const [isRandom, setIsRandom] = useState(false);
+  // const [songIndex, setSongIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [duration, setDuration] = useState("-:--");
   const [progressPercent, setProgressPercent] = useState(0);
   const progressRef = useRef();
 
-  const getPlaylist = useCallback(async () => {
-    const newPlaylist = await heavyPlaylist?.songs.map(
+  useEffect(() => {
+    const newPlaylist = currentPlaylist?.songs.map(
       (song) => new Audio(song.src)
     );
     setPlaylist(newPlaylist);
-  }, [heavyPlaylist]);
 
-  useEffect(() => {
-    getPlaylist();
-  }, [heavyPlaylist]);
+    let currentAudio =
+      playlist && playlist.find((audio) => false === audio.paused);
+
+    if (currentAudio) {
+      currentAudio.pause();
+    }
+    // eslint - disable - next - line;
+  }, [currentPlaylist]);
 
   const playSong = useCallback(() => {
     setIsPlaying(true);
+
+    let currentAudio =
+      playlist && playlist.find((audio) => false === audio.paused);
+
+    if (currentAudio) {
+      currentAudio.pause();
+    }
 
     let playPromise = playlist ? playlist[songIndex]?.play() : null;
 
@@ -58,34 +72,16 @@ const Player = () => {
 
   const prevSong = () => {
     pauseSong();
-
-    setSongIndex((prevSongIndex) => {
-      if (prevSongIndex <= 0 && !isRandom) {
-        return (prevSongIndex = playlist.length - 1);
-      } else if (prevSongIndex <= 0 && isRandom) {
-        return (prevSongIndex = Math.floor(Math.random() * playlist.length));
-      }
-      return prevSongIndex - 1;
-    });
+    dispatch({ type: "PLAY_PREV_SONG" });
   };
 
   const nextSong = useCallback(() => {
     pauseSong();
-
-    setSongIndex((prevSongIndex) => {
-      if (prevSongIndex >= playlist.length - 1 && !isRandom) {
-        return (prevSongIndex = 0);
-      } else if (prevSongIndex >= playlist.length - 1 && isRandom) {
-        return (prevSongIndex = Math.floor(Math.random() * playlist.length));
-      } else if (isRandom) {
-        return Math.floor(Math.random() * playlist.length);
-      }
-      return prevSongIndex + 1;
-    });
+    dispatch({ type: "PLAY_NEXT_SONG" });
 
     playlist[songIndex].currentTime = 0;
     setCurrentTime("0:00");
-  }, [pauseSong, isRandom, playlist, songIndex]);
+  }, [pauseSong, playlist, songIndex, dispatch]);
 
   const formatTime = (time) => {
     let minutes = Math.floor(time / 60);
@@ -103,7 +99,6 @@ const Player = () => {
   }, []);
 
   function setProgress(e) {
-    console.log("click");
     const width = progressRef.current.offsetWidth;
     const clickX = e.nativeEvent.offsetX;
     const duration = playlist[songIndex].duration;
@@ -125,6 +120,8 @@ const Player = () => {
       playlist &&
         playlist[songIndex]?.addEventListener("ended", () => {
           setIsPlaying(false);
+          playlist[songIndex].currentTime = 0;
+          setCurrentTime("0:00");
         });
     }
     return () => {
@@ -134,6 +131,8 @@ const Player = () => {
       playlist &&
         playlist[songIndex]?.removeEventListener("ended", () => {
           setIsPlaying(false);
+          playlist[songIndex].currentTime = 0;
+          setCurrentTime("0:00");
         });
     };
   }, [playlist, isLooping, songIndex, nextSong, updateProgress]);
@@ -156,8 +155,14 @@ const Player = () => {
           <AlbumIcon />
         </div>
         <div className="player__album--data">
-          <p className="player__album--title">Title</p>
-          <p className="player__album--artist">Artist {songIndex}</p>
+          <p className="player__album--title">
+            {currentPlaylist ? currentPlaylist.songs[songIndex].title : "Title"}
+          </p>
+          <p className="player__album--artist">
+            {currentPlaylist
+              ? currentPlaylist.songs[songIndex].artist
+              : "Title"}{" "}
+          </p>
         </div>
       </div>
 
@@ -177,10 +182,8 @@ const Player = () => {
         <RandomIcon
           className={isRandom ? "random" : ""}
           onClick={() => {
-            if (!isRandom) {
-              nextSong();
-            }
-            setIsRandom(!isRandom);
+            !isRandom && nextSong();
+            dispatch({ type: "TOGGLE_RANDOM" });
           }}
         />
         {isRandom && <div className="dotr"></div>}
@@ -197,7 +200,7 @@ const Player = () => {
 
         <LoopIcon
           className={isLooping ? "loop" : ""}
-          onClick={() => setIsLooping(!isLooping)}
+          onClick={() => dispatch({ type: "TOGGLE_LOOP" })}
         />
         {isLooping && <div className="dotl"></div>}
       </div>
