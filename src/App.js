@@ -17,7 +17,9 @@ function App() {
   const playlistIndex = useSelector(
     (state) => state.music.current.playlistIndex
   );
-  const currentPlaylist = useSelector((state) => state.music.playlists[1]);
+  const currentPlaylist = useSelector(
+    (state) => state.music.playlists[playlistIndex]
+  );
 
   if (!isLoggedIn) {
     return <Login />;
