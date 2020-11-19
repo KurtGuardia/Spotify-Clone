@@ -78,8 +78,27 @@
   }
 
   &__playlists {
+    overflow-y: scroll;
     flex: 1;
     margin: 1rem;
+
+    &::-webkit-scrollbar {
+      width: 0.7em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #555;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #777;
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+      background-color: #358a52;
+    }
 
     h4 {
       letter-spacing: 3px;

@@ -36,14 +36,14 @@ const Player = ({ currentPlaylist }) => {
     if (currentAudio) {
       currentAudio.pause();
     }
-    // eslint - disable - next - line;
+    // eslint-disable-next-line
   }, [currentPlaylist]);
 
   const playSong = useCallback(() => {
     setIsPlaying(true);
 
     let currentAudio =
-      playlist && playlist.find((audio) => false === audio.paused);
+      playlist && playlist?.find((audio) => false === audio.paused);
 
     if (currentAudio) {
       currentAudio.pause();

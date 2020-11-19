@@ -25,7 +25,7 @@ const Playlist = () => {
         history.push("/");
       });
     };
-  }, []);
+  }, [history]);
 
   return (
     <div className="playlist-container">
@@ -38,14 +38,16 @@ const Playlist = () => {
         </div>
         <div className="playlist-container__songs">
           {currentPlaylist &&
-            currentPlaylist.songs.map((song, index) => (
-              <Song
-                key={Math.random()}
-                {...song}
-                index={index}
-                songIndex={songIndex}
-              />
-            ))}
+            currentPlaylist.songs.map((song, index) => {
+              return (
+                <Song
+                  key={song.id}
+                  {...song}
+                  index={index}
+                  songIndex={songIndex}
+                />
+              );
+            })}
         </div>
       </div>
     </div>
