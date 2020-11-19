@@ -3,7 +3,11 @@ import "./Login.scss";
 import { ReactComponent as SpotifyIcon } from "../../assets/images/spotify.svg";
 import { auth } from "../../config/fbConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAction, setLoading } from "../../store/actions/authActions";
+import {
+  loginAction,
+  setLoading,
+  setUser,
+} from "../../store/actions/authActions";
 import Spinner from "../../Components/UI/Spinner/Spinner";
 
 const Login = () => {
@@ -52,9 +56,14 @@ const Login = () => {
         .signInWithEmailAndPassword(email, password)
         .then((auth) => {
           if (auth) {
-            console.log(auth);
+            // console.log(auth);
+            const user = {
+              email: auth.user.email,
+              uid: auth.user.uid,
+            };
             dispatch(setLoading(false));
             dispatch(loginAction(isValid));
+            dispatch(setUser(user));
           }
         })
         .catch((err) => alert(err.message));

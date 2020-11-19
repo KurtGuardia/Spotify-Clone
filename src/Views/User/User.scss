@@ -1,0 +1,55 @@
+.user {
+  height: 91vh;
+  flex: 1;
+  background-color: #131111;
+  color: #ccc;
+  padding: 1rem 2rem;
+  overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.7em;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #555;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #777;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #358a52;
+  }
+
+  h1 {
+    margin-bottom: 3rem;
+    letter-spacing: 2px;
+
+    span {
+      font-size: 1.5rem;
+      font-weight: 100;
+    }
+  }
+
+  &__logo {
+    width: 150px;
+    height: 150px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  p {
+    margin-top: 3rem;
+  }
+}
