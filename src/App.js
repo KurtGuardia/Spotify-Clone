@@ -11,9 +11,12 @@ import {
 import Player from "./Components/Player/Player";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import { useSelector } from "react-redux";
+import Modal from "./Components/UI/Modal/Modal";
+import { modalData } from "./config/modalData";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isOpen = useSelector((state) => state.info.isOpen);
   const playlistIndex = useSelector(
     (state) => state.music.current.playlistIndex
   );
@@ -30,6 +33,7 @@ function App() {
       <div className="app">
         <Sidebar />
         <Player currentPlaylist={currentPlaylist} />
+        <Modal title="Spotify Clone Info" content={modalData} show={isOpen} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/favorites" component={Favorites} />

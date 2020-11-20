@@ -122,12 +122,16 @@
 
     &--btn {
       text-decoration: none;
+      cursor: pointer;
+      outline: none;
       background-color: #1ed760;
       padding: 0.5rem;
       width: 70%;
+      font-weight: bold;
       margin: 1rem auto 0 auto;
       border-radius: 50px;
       font-size: 1rem;
+      border: none;
       color: #191414;
       text-align: center;
       transition: all 0.3s;
