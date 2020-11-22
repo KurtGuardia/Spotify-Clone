@@ -51,3 +51,8 @@ export default App;
 //1ed760 claro
 //1db954 oscuro
 //191414
+// Desktop: 1200px
+// Medium: 1024ps
+// small: 768
+// phone: 480
+// landscape

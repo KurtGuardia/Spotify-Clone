@@ -73,7 +73,7 @@ const Login = () => {
       <div className="login__logo">
         <SpotifyIcon />
         <span>
-          Spotify <small>clone</small>
+          Spotify <small className="clone">clone</small>
         </span>
       </div>
 

@@ -45,7 +45,7 @@ const Song = ({ title, artist, songIndex, index, src, duration, id }) => {
         .doc(playlistToUpdated.id)
         .set({ ...playlistToUpdated })
         .then(function () {
-          console.log("Document successfully written!");
+          console.log("Document successfully written (ADDED)!");
         })
         .catch(function (error) {
           console.log("Error writting docoment: ", error);
@@ -67,7 +67,7 @@ const Song = ({ title, artist, songIndex, index, src, duration, id }) => {
         .doc(playlistToUpdated.id)
         .set({ ...playlistToUpdated })
         .then(function () {
-          console.log("Document successfully written!");
+          console.log("Document successfully written (REMOVED)!");
         })
         .catch(function (error) {
           console.error("Error writing document: ", error);
