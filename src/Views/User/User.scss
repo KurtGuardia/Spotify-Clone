@@ -11,6 +11,11 @@
   flex-direction: column;
   overflow-y: scroll;
 
+  @media screen and (max-width: 900px) {
+    height: 85vh;
+    width: 19%;
+  }
+
   &::-webkit-scrollbar {
     width: 0.7em;
   }
@@ -33,15 +38,27 @@
     margin-bottom: 3rem;
     letter-spacing: 2px;
 
+    @media screen and (max-width: 768px) {
+      font-size: 1.7rem;
+    }
+
     span {
       font-size: 1.5rem;
       font-weight: 100;
+      @media screen and (max-width: 768px) {
+        font-size: 1.2rem;
+      }
     }
   }
 
   &__logo {
     width: 150px;
     height: 150px;
+
+    @media screen and (max-width: 768px) {
+      width: 90px;
+      height: 90px;
+    }
 
     svg {
       width: 100%;

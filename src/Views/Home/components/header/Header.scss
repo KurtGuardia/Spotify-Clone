@@ -36,8 +36,12 @@
     flex: 1;
     margin: 0 3rem;
 
+    @media screen and (max-width: 900px) {
+      margin: 0 1rem;
+    }
+
     input {
-      min-width: 300px;
+      min-width: 200px;
       padding: 0.5rem 1rem;
       outline: none;
       border: none;
