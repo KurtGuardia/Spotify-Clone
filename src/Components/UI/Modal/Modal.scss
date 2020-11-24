@@ -44,12 +44,40 @@
   display: flex;
   flex-direction: column;
 
+  @media screen and (max-width: 1200px) {
+    width: 50%;
+    height: 40%;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 60%;
+    height: 60%;
+  }
+
+  @media screen and (max-width: 800px) and (orientation: landscape) {
+    height: 75%;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 80%;
+  }
+
   &__title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 2rem;
     border-bottom: 1px solid #555;
+
+    @media screen and (max-width: 1200px) {
+      font-size: 0.9rem;
+      padding: 0.5rem 1.2rem;
+    }
+
+    @media screen and (max-width: 800px) and (orientation: landscape) {
+      font-size: 0.8rem;
+      padding: 0.3rem 1.2rem;
+    }
 
     h1 {
       letter-spacing: 2px;
@@ -85,6 +113,10 @@
     flex: 1;
     overflow-y: scroll;
     margin-bottom: 1rem;
+
+    @media screen and (max-width: 800px) and (orientation: landscape) {
+      padding: 0.5rem 1.25rem;
+    }
 
     &::-webkit-scrollbar {
       width: 0.7em;

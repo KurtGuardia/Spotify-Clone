@@ -9,6 +9,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
+  z-index: 10;
+
+  @media screen and (max-width: 900px) {
+    height: 15vh;
+  }
+
+  @media screen and (max-width: 480px) {
+    display: grid;
+    column-gap: 3px;
+    grid-template-areas: "album controls" "album progres";
+  }
 
   &__album {
     display: flex;
@@ -17,8 +28,25 @@
     color: #ccc;
     margin-left: 0.75rem;
 
+    @media screen and (max-width: 768px) {
+      margin: 0;
+      min-width: 9rem;
+    }
+
+    @media screen and (max-width: 480px) {
+      grid-area: album;
+    }
+
     &--img {
       margin-right: 1rem;
+
+      @media screen and (max-width: 768px) {
+        width: 40px;
+        svg {
+          width: 100%;
+          height: auto;
+        }
+      }
     }
 
     &--title {
@@ -39,6 +67,15 @@
     align-items: center;
     justify-content: space-between;
     transition: all 0.2s;
+
+    @media screen and (max-width: 768px) {
+      margin: 0 0.75rem;
+    }
+
+    @media screen and (max-width: 480px) {
+      grid-area: progres;
+      margin: 0;
+    }
 
     &:hover {
       filter: brightness(1);
@@ -62,11 +99,35 @@
     justify-content: space-between;
     margin: 0 7rem;
 
+    @media (max-width: 1350px) {
+      margin: 0 3rem;
+    }
+
+    @media (max-width: 1024px) {
+      margin: 0 1rem;
+    }
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+      min-width: 10rem;
+    }
+
+    @media screen and (max-width: 480px) {
+      grid-area: controls;
+      min-width: 14rem;
+    }
+
     & > * {
       opacity: 0.9;
       cursor: pointer;
       margin: 0 0.75rem;
       transition: all 0.2s;
+
+      @media screen and (max-width: 768px) {
+        margin: 0 0.5rem;
+        width: 16px;
+        height: auto;
+      }
 
       &:hover {
         opacity: 1;
@@ -116,6 +177,20 @@
 
       &:active {
         transform: rotate(180deg) scale(1);
+      }
+    }
+
+    .play-pause-btn {
+      @media screen and (max-width: 768px) {
+        width: 30px;
+        height: auto;
+      }
+    }
+
+    .loop-icon {
+      @media screen and (max-width: 768px) {
+        width: 19px;
+        height: auto;
       }
     }
   }

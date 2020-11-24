@@ -30,7 +30,7 @@ const Banner = () => {
     <div className="banner">
       <div className="banner__left">
         <h2 className="banner__title">Welcome Kurt</h2>
-        <p className="banner__date">Today: {date}</p>
+        <p className="banner__date">{date}</p>
         <p className="banner__msg">Play any playlists you want</p>
       </div>
       <div className="banner__right">
