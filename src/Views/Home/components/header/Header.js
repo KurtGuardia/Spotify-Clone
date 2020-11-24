@@ -2,9 +2,13 @@ import "./Header.scss";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as GoBackIcon } from "../../../../assets/icons/goBack.svg";
 import { ReactComponent as UserIcon } from "../../../../assets/icons/user.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleSidebar } from "../../../../store/actions/infoActions";
 
 const Header = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const isSidebarOpen = useSelector((state) => state.info.isSidebarOpen);
 
   return (
     <div className="header">
@@ -21,6 +25,15 @@ const Header = () => {
         <UserIcon />
         <span>Kurt Guardia</span>
       </Link>
+
+      <div
+        className={`app__menu ${isSidebarOpen && "close"}`}
+        onClick={() => dispatch(toggleSidebar())}
+      >
+        <div className="bar-1"></div>
+        <div className="bar-2"></div>
+        <div className="bar-3"></div>
+      </div>
     </div>
   );
 };
