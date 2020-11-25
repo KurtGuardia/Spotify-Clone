@@ -39,7 +39,7 @@ function App() {
           <Route path="/favorites" component={Favorites} />
           <Route path="/user" component={User} />
           <Route path="/playlist/:id" component={Playlist} />
-          <Route path="/asdf" component={NotFound} />
+          <Route component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>
