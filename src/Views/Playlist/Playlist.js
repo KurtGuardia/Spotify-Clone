@@ -1,10 +1,10 @@
-import "./Playlist.scss";
-import Header from "../Home/components/header/Header";
-import { useHistory } from "react-router-dom";
-import Song from "./Components/Song/Song";
-import { useSelector } from "react-redux";
-import PlaylistInfo from "./Components/PlaylistInfo/PlaylistInfo";
-import { useEffect } from "react";
+import './Playlist.scss';
+import Header from '../Home/components/header/Header';
+import { useHistory } from 'react-router-dom';
+import Song from './Components/Song/Song';
+import { useSelector } from 'react-redux';
+import PlaylistInfo from './Components/PlaylistInfo/PlaylistInfo';
+import { useEffect } from 'react';
 
 const Playlist = () => {
   const history = useHistory();
@@ -17,31 +17,31 @@ const Playlist = () => {
   );
 
   useEffect(() => {
-    window.addEventListener("DOMContentLoaded", () => {
-      history.push("/");
+    window.addEventListener('DOMContentLoaded', () => {
+      history.push('/');
     });
     return () => {
-      window.removeEventListener("DOMContentLoaded", () => {
-        history.push("/");
+      window.removeEventListener('DOMContentLoaded', () => {
+        history.push('/');
       });
     };
   }, [history]);
 
   return (
-    <div className="playlist-container">
+    <div className='playlist-container'>
       <Header />
       <PlaylistInfo {...currentPlaylist} />
-      <div className="playlist-container__table">
-        <div className="playlist-container__title">
+      <div className='playlist-container__table'>
+        <div className='playlist-container__title'>
           <p>Title</p>
           <p>Artist</p>
         </div>
-        <div className="playlist-container__songs">
+        <div className='playlist-container__songs'>
           {currentPlaylist &&
             currentPlaylist.songs.map((song, index) => {
               return (
                 <Song
-                  key={song.id}
+                  key={song.src}
                   {...song}
                   index={index}
                   songIndex={songIndex}

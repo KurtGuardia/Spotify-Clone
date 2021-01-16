@@ -27,7 +27,7 @@
         font-size: 3rem;
       }
 
-      .small {
+      small {
         color: #1ed760;
         font-size: 2.5rem;
 
@@ -52,6 +52,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     @media screen and (max-width: 768px) {
       padding: 0;
@@ -85,6 +86,10 @@
         outline: none;
         color: #fff;
 
+        &::placeholder {
+          color: #cfc9c93d;
+        }
+
         @media screen and (max-width: 768px) {
           padding: 3px 6px;
           font-size: 1rem;
@@ -99,6 +104,7 @@
   }
 
   &__btn {
+    width: 50%;
     cursor: pointer;
     outline: none;
     color: #191414;
